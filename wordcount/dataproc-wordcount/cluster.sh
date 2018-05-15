@@ -15,7 +15,7 @@
 
 PHASE=""
 DEFAULT_ZONE="asia-south1-a"
-DEFAULT_CLUSTER='mycluster336'
+DEFAULT_CLUSTER='mycluster3367'
 
 # Mac OS X -- "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"
 # Linux -- google-chrome
@@ -86,8 +86,8 @@ start)  # start [<clusterName>]
   gcloud dataproc jobs submit hadoop --cluster "$CLUSTER" \
     --jar target/wordcount-mapreduce-0-SNAPSHOT-jar-with-dependencies.jar \
     -- wordcount-hbase \
-    gs://mybucket336/input/input.txt \
-    gs://mybucket336/output \
+    gs://mybucket3367/input/input.txt \
+    gs://mybucket3367/output \
     "${TARGET}"
     echo "Output table is: ${TARGET}"
   ;;
