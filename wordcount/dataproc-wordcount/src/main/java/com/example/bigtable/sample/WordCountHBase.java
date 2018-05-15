@@ -1,4 +1,3 @@
-
 package com.example.bigtable.sample;
 import java.io.IOException;
 import org.apache.hadoop.conf.Configuration;
@@ -30,48 +29,34 @@ public class WordCountHBase {
     FileOutputFormat.setOutputPath(j, output);
     System.exit(j.waitForCompletion(true)?0:1);
   }
-  //class Map
+   // kiem tra so NT
+   public static boolean laNT(int n) {
+      int dem = 0;
+      for (int i = 1; i <= n; i++) 
+		if(n%i==0)
+			dem++;
+	if(dem==2)
+		return true;
+	return false;
+  }
   public static class MapForWordCount extends Mapper<LongWritable, Text, Text, IntWritable>
   {
     public void map(LongWritable key, Text value, Context con) throws IOException, InterruptedException
     {
-      //lấy thông tin trong file input chuyển sang 1 chuổi kiểu string
       String line = value.toString();
-      //tách từng số bỏ vào mảng string
       String[] numbers=line.split(",");
       for(String number: numbers )
       {
-        //chuyển sang kiểu số
-        int num = Integer.parseInt(number);
-        //khởi tạo key out put
+        int no = Integer.parseInt(number);
         Text outputKey = new Text(number.toUpperCase().trim());
-        //khởi tạo biến lưu giá trị của key out put
+
         IntWritable outputValue = new IntWritable(1);
-        //kiểm tra xem số trên phải số nguyên tố hay không
-        //nếu đúng thì ghi vào cập giá trị <key,value>
-        if(isPrimeNumber(num)){
+        if(laNT(no)){
           con.write(outputKey, outputValue);
         }        
       }
     }
-    //hàm kiểm tra số nguyên tố
-    public static boolean isPrimeNumber(int n) {
-      // so nguyen n < 2 khong phai la so nguyen to
-      if (n < 2) {
-          return false;
-      }
-      // check so nguyen to khi n >= 2
-      int squareRoot = (int) Math.sqrt(n);
-      for (int i = 2; i <= squareRoot; i++) {
-          if (n % i == 0) {
-              return false;
-          }
-      }
-      return true;
-    }
 
-  }
-  //class Reduce
   public static class ReduceForWordCount extends Reducer<Text, IntWritable, Text, IntWritable>
   {
     public void reduce(Text word, Iterable<IntWritable> values, Context con) throws IOException, InterruptedException
